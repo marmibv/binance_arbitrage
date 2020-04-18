@@ -89,6 +89,7 @@ def print_backward(eth_btc, xrp_btc, xrp_eth):
 
 
 def main():
+    # TODO Get Lot Sizes and Adjust for Each Order
     # step size info
     info = client.get_exchange_info()
     balance = client.get_asset_balance(asset='BTC')

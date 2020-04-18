@@ -4,7 +4,6 @@ project: Binance Arbitrage Trading Bot
 aim: using triangular arbitrage, automate trades that are guaranteed to return a specified profit or more.
 """
 
-from timeit import default_timer as timer
 from binance.client import Client
 from binance.enums import *
 
@@ -14,13 +13,11 @@ api_secret = "IWckkJsFQCGONzFzz9CWJaapgpM2BSOiGxKWLqpHoIk1lJ8G2OlPWBwEio4eDihI"
 # initialise a client
 client = Client(api_key, api_secret, {"timeout": 600})
 
-"""
-FORMATTING ORDERS 
-
-amount = 0.000234234
-precision = 5
-amt_str = "{:0.0{}f}".format(amount, precision)
-"""
+lot_sizes = {
+    "ETHBTC" : 0.00100000,
+    "XRPETH" : 1.00000000,
+    "XRPBTC" : 1.00000000
+}
 
 
 # BTC -> ETH -> XRP -> BTC
@@ -54,7 +51,6 @@ def trade_backward(eth_btc, xrp_btc, xrp_eth):
 
 
 # Print out a forward trade
-# BTC -> ETH -> XRP -> BTC
 def print_forward(eth_btc, xrp_btc, xrp_eth):
     # BTC -> ETH : eth/btc -> buy eth with btc
     q1 = "{:0.0{}f}".format((0.01 / float(eth_btc)), 5)
@@ -74,7 +70,7 @@ def print_forward(eth_btc, xrp_btc, xrp_eth):
 # print out a backward trade
 def print_backward(eth_btc, xrp_btc, xrp_eth):
     # BTC -> XRP : xrp/btc -> buy xrp with btc
-    q1 = "{:0.0{}f}".format((0.01 / float(xrp_btc)), 5)
+    q1 = "{:0.0{}f}".format((0.01 / float(xrp_btc)), 0)
     print(q1 + "XRP with 0.01 BTC\n")
 
     # XRP -> ETH : xrp/eth -> sell xrp for eth
@@ -128,8 +124,3 @@ def main():
 
 
 main()
-
-i = 0
-while i < 10:
-    main()
-    i = i + 1

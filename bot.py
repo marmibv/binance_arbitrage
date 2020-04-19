@@ -64,7 +64,6 @@ def print_forward(eth_btc, xrp_btc, xrp_eth):
     q3 = "{:0.0{}f}".format(float(q2) * float(xrp_btc), 5)
     print(q3 + " BTC with " + q2 + " XRP\n")
 
-    print("Profit/Loss = " + str(float(q3)-0.01) + " BTC")
 
 
 # print out a backward trade
@@ -80,8 +79,6 @@ def print_backward(eth_btc, xrp_btc, xrp_eth):
     # ETH -> BTC : eth/btc -> sell eth for btc
     q3 = "{:0.0{}f}".format(float(q2) * float(eth_btc), 5)
     print(q3 + " BTC with " + q2 + " XRP\n")
-
-    print("Profit/Loss = " + str(float(q3) - 0.01) + " BTC")
 
 
 def main():

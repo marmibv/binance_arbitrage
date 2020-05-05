@@ -41,3 +41,6 @@ for item in btc_match:
         if item[:3] in ethpair[:3]:
             set_list.append((item,ethpair))
 
+with open('output.csv','w',newline='') as writeFile:
+    writer = csv.writer(writeFile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    writer.writerows(set_list)

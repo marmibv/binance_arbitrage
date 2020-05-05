@@ -25,30 +25,34 @@ def trade_forward(eth_btc, xrp_btc, xrp_eth):
     # BTC -> ETH : eth/btc -> buy eth with btc
     q1 = "{:0.0{}f}".format((0.01 / float(eth_btc)), 5)
     order_one = client.order_market_buy(symbol='ETHBTC', quantity=q1)
+    print("btc -> eth done")
 
     # ETH -> XRP : xrp/eth -> buy xrp with eth
     q2 = "{:0.0{}f}".format((float(q1) / float(xrp_eth)), 5)
     order_two = client.order_market_buy(symbol='XRPETH', quantity=q2)
+    print("eth -> xrp done")
 
     # XRP -> BTC : xrp/btc -> sell xrp for btc
     q3 = "{:0.0{}f}".format(float(q2) * float(xrp_btc), 5)
     order_three = client.order_market_sell(symbol='XRPBTC', quantity=q3)
-
+    print("xrp -> btc done")
 
 # print out a backward trade
 def trade_backward(eth_btc, xrp_btc, xrp_eth):
     # BTC -> XRP : xrp/btc -> buy xrp with btc
     q1 = "{:0.0{}f}".format((0.01 / float(xrp_btc)), 5)
     order_one = client.order_market_buy(symbol='XRPBTC', quantity=q1)
+    print("btc -> xrp done")
 
     # XRP -> ETH : xrp/eth -> sell xrp for eth
     q2 = "{:0.0{}f}".format(float(q1) * float(xrp_eth), 5)
     order_three = client.order_market_sell(symbol='XRPETH', quantity=q2)
+    print("xrp -> eth done")
 
     # ETH -> BTC : eth/btc -> sell eth for btc
     q3 = "{:0.0{}f}".format(float(q2) * float(eth_btc), 5)
     order_three = client.order_market_sell(symbol='ETHBTC', quantity=q3)
-
+    print("eth -> btc done")
 
 # Print out a forward trade
 def print_forward(eth_btc, xrp_btc, xrp_eth):
@@ -63,7 +67,6 @@ def print_forward(eth_btc, xrp_btc, xrp_eth):
     # XRP -> BTC : xrp/btc -> sell xrp for btc
     q3 = "{:0.0{}f}".format(float(q2) * float(xrp_btc), 5)
     print(q3 + " BTC with " + q2 + " XRP\n")
-
 
 
 # print out a backward trade
@@ -109,13 +112,15 @@ def main():
         # condition for trade
         if forward / 0.01 > 1.00015:
             print("trade worthy forward")
-            print_forward(eth_btc, xrp_btc, xrp_eth)
+            # print_forward(eth_btc, xrp_btc, xrp_eth)
+            trade_forward(eth_btc, xrp_btc, xrp_eth)
     elif backward > 0.01:
         print("Backward: 0.01 BTC to " + str(backward))
         # condition for trade
         if backward / 0.01 > 1.00015:
             print("trade worthy backward")
-            print_backward(eth_btc, xrp_btc, xrp_eth)
+            # print_backward(eth_btc, xrp_btc, xrp_eth)
+            trade_backward(eth_btc, xrp_btc, xrp_eth)
     else:
         print("No trade")
 

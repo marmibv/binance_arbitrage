@@ -26,11 +26,6 @@ def main():
     xrp_eth = tickers[91]['askPrice']
     xrp_btc = tickers[90]['askPrice']
 
-    # 0.01 BTC -> XRP -> ETH -> BTC
-    backward = 0.01 / float(xrp_btc) * float(xrp_eth) * float(eth_btc)
-
-    print("backwards trade: " + str(backward))
-
     # buy xrp with 0.02 btc
     xrp_amount = Decimal(0.01) / Decimal(xrp_btc)
     print("0.01 BTC to XRP -> " + str(xrp_amount) + " XRP")
@@ -51,5 +46,6 @@ def main():
     print("========================================")
     print("0.01 BTC to " + str(btc_amount))
     print("========================================")
+
 
 main()

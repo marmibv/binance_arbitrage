@@ -65,10 +65,7 @@ for pair in set_list:
             if ele['symbol'] == item:
                 temp_dict[item] = count
     # add to final
-    if len(item) == 7:
-        final[pair[0][:4]] = temp_dict
-    else:
-        final[pair[0][:3]] = temp_dict
+    final[pair[0][:-3]] = temp_dict
 
 try1 = "ZRXBTC"
 for element in tickers:
@@ -80,5 +77,8 @@ for count, ele in enumerate(tickers):
     if ele['symbol'] == "ZRXBTC":
         print(count)
 
+final.pop('STORM')
+
 with open('indices.json', 'w') as fp:
     json.dump(final, fp)
+

@@ -18,67 +18,66 @@ getcontext().prec = 8
 
 lot_sizes = {
     "ETHBTC": 0.00100000,
-    "XRPETH": 1.00000000,
-    "XRPBTC": 1.00000000
+    "QTUMETH": 0.01000000,
+    "QTUMBTC": 0.01000000
 }
 
 
 # trade forward
-# BTC -> ETH -> XRP -> BTC
+# BTC -> ETH -> QTUM -> BTC
 def forward(pricelist):
     eth_btc = pricelist[0]
-    xrp_eth = pricelist[1]
-    xrp_btc = pricelist[2]
+    alt_eth = pricelist[1]
+    alt_btc = pricelist[2]
 
     # buy eth with 0.01 btc
     eth_amount = Decimal(0.01) / Decimal(eth_btc)
     print("0.01 BTC to ETH ->" + str(eth_amount) + " ETH")
-    eth_amount = eth_amount - (eth_amount % lot_sizes["ETHBTC"])
+    eth_amount = eth_amount - (eth_amount % Decimal(lot_sizes["ETHBTC"]))
     print("trimmed to " + str(eth_amount))
     q1 = "{:0.0{}f}".format(eth_amount, 5)
     order_one = client.order_market_buy(symbol='ETHBTC', quantity=q1)
 
     # buy xrp with eth
-    xrp_amount = eth_amount * Decimal(xrp_eth)
-    print(str(eth_amount) + " ETH to XRP -> " + str(xrp_amount) + " XRP")
-    xrp_amount = xrp_amount - (xrp_amount % lot_sizes["XRPBTC"])
-    print("trimmed to " + str(xrp_amount))
-    q2 = "{:0.0{}f}".format(xrp_amount, 5)
-    order_two = client.order_market_buy(symbol='XRPETH', quantity=q2)
+    alt_amount = eth_amount / Decimal(alt_eth)
+    print(str(eth_amount) + " ETH to QTUM -> " + str(alt_amount) + " QTUM")
+    alt_amount = alt_amount - (alt_amount % Decimal(lot_sizes["QTUMBTC"]))
+    print("trimmed to " + str(alt_amount))
+    q2 = "{:0.0{}f}".format(alt_amount, 5)
+    order_two = client.order_market_buy(symbol='QTUMETH', quantity=q2)
     print("trade two complete")
 
     # sell xrp amount for btc
-    q3 = "{:0.0{}f}".format(xrp_amount, 5)
-    order_three = client.order_market_sell(symbol='XRPBTC', quantity=q3)
-    btc_amount = xrp_amount * Decimal(xrp_btc)
-    print(str(xrp_amount) + " XRP to BTC ->" + str(btc_amount) + " BTC")
+    order_three = client.order_market_sell(symbol='QTUMBTC', quantity=q2)
+    btc_amount = alt_amount * Decimal(alt_btc)
+    print(str(alt_amount) + " QTUM to BTC ->" + str(btc_amount) + " BTC")
     print("========================================")
     print("0.01 BTC to " + str(btc_amount))
     print("========================================")
 
 
 # trade backward
-# BTC -> XRP -> ETH -> BTC
+# BTC -> QTUM -> ETH -> BTC
 def backward(pricelist):
     eth_btc = pricelist[0]
-    xrp_eth = pricelist[1]
-    xrp_btc = pricelist[2]
+    alt_eth = pricelist[1]
+    alt_btc = pricelist[2]
 
     # buy xrp with 0.01 btc
-    xrp_amount = Decimal(0.01) / Decimal(xrp_btc)
-    print("0.01 BTC to XRP -> " + str(xrp_amount) + " XRP")
-    xrp_amount = xrp_amount - (xrp_amount % Decimal(lot_sizes["XRPBTC"]))
-    print("trimmed to " + str(xrp_amount))
-    q1 = "{:0.0{}f}".format(xrp_amount, 5)
-    order_one = client.order_market_buy(symbol='XRPBTC', quantity=q1)
+    alt_amount = Decimal(0.01) / Decimal(alt_btc)
+    print("0.01 BTC to QTUM -> " + str(alt_amount) + " QTUM")
+    alt_amount = alt_amount - (alt_amount % Decimal(lot_sizes["QTUMBTC"]))
+    print("trimmed to " + str(alt_amount))
+    q1 = "{:0.0{}f}".format(alt_amount, 5)
+    order_one = client.order_market_buy(symbol='QTUMBTC', quantity=q1)
 
     # sell xrp amount for eth
-    eth_amount = xrp_amount * Decimal(xrp_eth)
-    print(str(xrp_amount) + " XRP to ETH -> " + str(eth_amount) + " ETH")
+    eth_amount = alt_amount * Decimal(alt_eth)
+    print(str(alt_amount) + " QTUM to ETH -> " + str(eth_amount) + " ETH")
     eth_amount = eth_amount - (eth_amount % Decimal(lot_sizes["ETHBTC"]))
     print("trimmed to " + str(eth_amount))
     q2 = "{:0.0{}f}".format(eth_amount, 5)
-    order_two = client.order_market_sell(symbol='XRPETH', quantity=q1)
+    order_two = client.order_market_sell(symbol='QTUMETH', quantity=q1)
     print("trade two complete")
 
     order_three = client.order_market_sell(symbol='ETHBTC', quantity=q2)
@@ -93,7 +92,7 @@ def backward(pricelist):
 # include all three values in case residuals left aside
 def report(wallet):
     result = [client.get_asset_balance(asset='BTC')["free"],
-              client.get_asset_balance(asset='XRP')["free"],
+              client.get_asset_balance(asset='QTUM')["free"],
               client.get_asset_balance(asset='ETH')["free"]]
 
     # results
@@ -103,33 +102,35 @@ def report(wallet):
 
     print("BTC: " + str(btc_result))
     print("ETH: " + str(eth_result))
-    print("XRP: " + str(xrp_result))
+    print("QTUM: " + str(xrp_result))
 
 
 def main():
     wallet = [client.get_asset_balance(asset='BTC')["free"],
-              client.get_asset_balance(asset='XRP')["free"],
+              client.get_asset_balance(asset='QTUM')["free"],
               client.get_asset_balance(asset='ETH')["free"]]
 
     start = time.time()
 
     tickers = client.get_ticker()
     eth_btc = tickers[0]['askPrice']
-    xrp_eth = tickers[91]['askPrice']
-    xrp_btc = tickers[90]['askPrice']
+    alt_eth = tickers[4]['askPrice']
+    alt_btc = tickers[23]['askPrice']
 
-    pricelist = [eth_btc, xrp_eth, xrp_btc]
+    info = client.get_exchange_info()
 
-    # 0.01 BTC -> ETH -> XRP -> BTC
-    fwd = Decimal(0.01) / Decimal(eth_btc) / Decimal(xrp_eth) * Decimal(xrp_btc)
+    pricelist = [eth_btc, alt_eth, alt_btc]
 
-    # 0.01 BTC -> XRP -> ETH -> BTC
-    bwd = Decimal(0.01) / Decimal(xrp_btc) * Decimal(xrp_eth) * Decimal(eth_btc)
+    # 0.01 BTC -> ETH -> QTUM -> BTC
+    fwd = Decimal(0.01) / Decimal(eth_btc) / Decimal(alt_eth) * Decimal(alt_btc)
+
+    # 0.01 BTC -> QTUM -> ETH -> BTC
+    bwd = Decimal(0.01) / Decimal(alt_btc) * Decimal(alt_eth) * Decimal(eth_btc)
 
     if fwd > 0.01:
         print("Forward: 0.01 BTC to " + str(fwd))
         # condition for trade
-        if fwd / Decimal(0.01) > Decimal(1.0002):
+        if fwd > Decimal(0.01001):
             print("trade worthy forward")
             forward(pricelist)
             end = time.time()
@@ -138,7 +139,7 @@ def main():
     elif bwd > 0.01:
         print("Backward: 0.01 BTC to " + str(bwd))
         # condition for trade
-        if bwd / Decimal(0.01) > Decimal(1.0002):
+        if bwd > Decimal(0.01001):
             print("trade worthy backward")
             backward(pricelist)
             end = time.time()
@@ -151,7 +152,7 @@ def main():
         print("No trade")
 
 
-for i in range(50):
+for i in range(10):
     main()
-
+    time.sleep(5)
 

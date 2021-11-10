@@ -2,7 +2,7 @@
  This is a trading bot being made to take advantage of arbitrage opportunity in cryptocurrency markets, specifically on the exchange Binance.
  This has been made using the python-binance API wrapper available at https://python-binance.readthedocs.io/
 
-This bot successfully trades on the binance exchange. APIs keys need to be changed - mine has since been deleted.  
+This bot successfully trades on the binance exchange. APIs keys need to be changed - mine have since been deleted.  
 </br>
 **qtum.py** is the main bot trading through the coins ETH/BTC/QTUM. The thought being that qtum was a relatively small volume coin at the time of making this bot, therefore providing decent opportunity for arbitrage.  </br>
 Things to consider in the future;  

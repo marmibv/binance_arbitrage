@@ -8,8 +8,8 @@ from binance.client import Client
 from decimal import *
 import time
 
-api_key = "18YtfZfxwuBEN1V4fupoJakkuWvy1cwlNCPaWNKopjxkJkAoDeZdUNtfPk1cBdeY"
-api_secret = "IWckkJsFQCGONzFzz9CWJaapgpM2BSOiGxKWLqpHoIk1lJ8G2OlPWBwEio4eDihI"
+api_key = ""
+api_secret = ""
 
 # initialise a client
 client = Client(api_key, api_secret, {"timeout": 600})
